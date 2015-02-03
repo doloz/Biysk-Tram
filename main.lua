@@ -9,22 +9,29 @@
 local composer = require "composer"
 local Colors = require "Colors"
 
-local systemFonts = native.getFontNames()
+-- local buttonPadding = 5
+-- local image1 = display.newImageRect("img/gps.png")
+-- image1.x = display.contentCenterX
+-- image1.y = 50
 
--- Set the string to query for (part of the font name to locate)
-local searchString = "pt"
+-- -- local image2 = display.newI
 
--- Display each font in the Terminal/console
-for i, fontName in ipairs( systemFonts ) do
+-- local systemFonts = native.getFontNames()
 
-    local j, k = string.find( string.lower(fontName), string.lower(searchString) )
+-- -- Set the string to query for (part of the font name to locate)
+-- local searchString = "pt"
 
-    if ( j ~= nil ) then
-        print( "Font Name = " .. tostring( fontName ) )
-    end
-end
+-- -- Display each font in the Terminal/console
+-- for i, fontName in ipairs( systemFonts ) do
 
-print(Colors.LABEL_BLACK)
+--     local j, k = string.find( string.lower(fontName), string.lower(searchString) )
+
+--     if ( j ~= nil ) then
+--         print( "Font Name = " .. tostring( fontName ) )
+--     end
+-- end
+
+-- print(Colors.LABEL_BLACK)
 composer.gotoScene("scheduleScene", {
 		effect = "fade",
 		time = 300

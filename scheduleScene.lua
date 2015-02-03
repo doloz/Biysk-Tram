@@ -70,8 +70,8 @@ function scene:create( event )
     
     NearestStop:setup(display.contentWidth / 2, display.screenOriginY + nsHeight / 2, display.actualContentWidth, nsHeight)
     sceneGroup:insert(NearestStop.group)
-    locationLabel = display.newText("", display.contentWidth / 2, display.contentHeight / 2, nil, 14)
-    sceneGroup:insert(locationLabel)
+    -- locationLabel = display.newText("", display.contentWidth / 2, display.contentHeight / 2, nil, 14)
+    -- sceneGroup:insert(locationLabel)
 
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -87,11 +87,11 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif ( phase == "did" ) then
-        Runtime:addEventListener( "location", updateLocation )
+        -- Runtime:addEventListener( "location", updateLocation )
     end
 end
 
-function updateLocation(event)
+local function updateLocation(event)
     if event.errorCode then
         locationLabel.text = "Не могу получить данные"
     else
