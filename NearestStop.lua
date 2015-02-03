@@ -2,6 +2,10 @@
 local widget = require "widget"
 local Colors = require "Colors"
 
+require("mobdebug").start("10.3.129.221")
+
+
+
 local NearestStop = {
 	currentStop = nil
 }
