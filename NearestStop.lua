@@ -1,5 +1,6 @@
 --- Nearest Stop
 local widget = require "widget"
+local Colors = require "Colors"
 
 local NearestStop = {
 	autoDetection = true,
@@ -24,7 +25,7 @@ end
 
 function createWaitGeoInfoLayer(alpha)
 	local waitGeoInfo = display.newGroup()
-	local waitLabel = display.newText(waitGeoInfo, "Ищем ближайшую остановку...", metrics.x, metrics.y + 5, nil, 12, "right")
+	local waitLabel = display.newText(waitGeoInfo, "Ищем ближайшую остановку...", metrics.x, metrics.y + 10, nil, 12, "right")
 	-- waitLabel.align = "center"
 	local gpsIcon = display.newImage(waitGeoInfo, "img/gps.png", metrics.x, metrics.top + 20)
 	gpsIcon:scale(0.5, 0.5)
@@ -35,31 +36,28 @@ function createWaitGeoInfoLayer(alpha)
 
 	waitGeoInfo.show = function ()
 		function animationCycle()
-			local sc = 0.7
+			-- local sc = 0.7
 			transition.to(gpsIcon, {
-				time = 400,
+				time = 2000,
 				tag = "icon_rotation1",
-				rotation = 181,
-				xScale = sc,
-				yScale = sc
-			})
-			transition.to(gpsIcon, {
-				time = 400,
-				tag = "icon_rotation2",
 				rotation = 360,
-				xScale = 0.5,
-				yScale = 0.5,
-				delay = 800
+				iterations = -1
 			})
+			-- transition.to(gpsIcon, {
+			-- 	time = 400,
+			-- 	tag = "icon_rotation2",
+			-- 	rotation = 360,
+			-- 	delay = 800
+			-- })
 		end
-		timer.performWithDelay(1600, animationCycle, 0)
+		timer.performWithDelay(0, animationCycle, 1)
 	end
 	return waitGeoInfo
 end
 
 function createStopDetectedLayer(alpha)
 	local stopDetected = display.newGroup()
-	local stopNameLabel = display.newText(stopDetected, "Выставочный зал", metrics.x, metrics.y, native.systemFontBold, 15)
+	local stopNameLabel = display.newText(stopDetected, "Выставочный зал", metrics.x, metrics.y + 10, native.systemFontBold, 15)
 	local gpsIcon = display.newImage(stopDetected, "img/gps_green.png", metrics.x, metrics.top + 20)
 	gpsIcon:scale(0.5, 0.5)
 
@@ -103,11 +101,25 @@ function NearestStop:setup(x, y, width, height)
 	setupMetrics(x, y, width, height)
 	local mainGroup = display.newGroup()
 	local bgRect = display.newRect(mainGroup, x, y, width, height)
-	bgRect:setFillColor(0.5, 0.2, 0.8)
+	bgRect:setFillColor(colorsFromHex("FF5300"))
 
 	mainGroup:insert(createWaitGeoInfoLayer(0.0))
 	mainGroup:insert(createStopDetectedLayer(0.0))
 	mainGroup:insert(createGotErrorLayer(0.0))
+
+	local buttonSide = 32
+	local selectStopButton = widget.newButton {
+		x = metrics.right - buttonSide / 2 - 20,
+		y = metrics.y,
+		width = buttonSide,
+		height = buttonSide,
+		defaultFile = "img/selectStop@2x.png",
+		overFile = "img/selectStopOver.png",
+		onRelease = function ()
+			print("Pressed!")
+		end
+	}	
+	mainGroup:insert(selectStopButton)
 
 	self.group = mainGroup
 	self:transitionToLayer(layers.waitGeoInfo)
@@ -115,39 +127,6 @@ function NearestStop:setup(x, y, width, height)
 	 	self:transitionToLayer(layers.gotError) end)
 	timer.performWithDelay( 8000, function ()
 	 	self:transitionToLayer(layers.stopDetected) end)
-
-	-- local mainGroup, errorGroup, regularGroup = display.newGroup(), display.newGroup(), display.newGroup()
-	-- local bgRect = display.newRect(mainGroup, x, y, width, height)
-
-	-- bgRect:setFillColor(0.5, 0.2, 0.8)
-
-	-- -- regular
-	-- local nearestStopLabel = display.newText(regularGroup, "Ближайшая остановка", x, y - 4, nil, 12)
-	-- local nearestStopNameLabel = display.newText(regularGroup, "Выставочный зал", x, y + 15, native.systemFontBold, 16)
-	-- local tramIcon = display.newImage(regularGroup, "img/tram.png", x, y - 20)
-
-	-- regularGroup.alpha = 0.0
-	-- local errorMessageLabel = display.newText(errorGroup, "Геолокация не работает", x, y - 4, nil, 12)
-	-- local errorIcon = display.newImage(errorGroup, "img/nogps.png", x, y - 20)
-	-- errorIcon:scale(0.5, 0.5)
-	-- local setStopButton = widget.newButton {
-	-- 	x = x,
-	-- 	y = nearestStopNameLabel.y,
-	-- 	onRelease = setStopButtonPressed,
-	-- 	label = "● Задать остановку вручную ●",
-	-- 	labelColor = { default = { 1, 1, 1 }, over = { 0, 0.5, 1 } },
-	-- 	fontSize = 13,
-	-- 	onRelease = function ()
-	-- 		self:switchGroups()
-	-- 	end
-	-- }
-	-- errorGroup:insert(setStopButton)
-
-	-- self.regularGroup = regularGroup
-	-- self.errorGroup = errorGroup
-	-- self.group = mainGroup
-	-- self.nearestStopLabel = nearestStopLabel
-	-- self.nearestStopNameLabel = nearestStopNameLabel
 	Runtime:addEventListener("location", updateLocation)
 end
 

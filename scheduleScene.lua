@@ -4,6 +4,9 @@ local NearestStop = require "NearestStop"
 local scene = composer.newScene()
 
 local locationLabel
+
+-- createNearestStopLabels(sceneGroup)
+local nsHeight = 75
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
 -- -----------------------------------------------------------------------------------------------------------------
@@ -38,9 +41,9 @@ end
 function createTable(rootView)
     local tableView = widget.newTableView {
         left = 0,
-        top = 50,
-        width = display.contentWidth,
-        height = display.actualContentHeight - 50,
+        top = display.screenOriginY + nsHeight + 1,
+        width = display.actualContentWidth,
+        height = display.actualContentHeight - (display.screenOriginY + nsHeight + 1),
         backgroundColor = { 0.6, 0.7, 0.8 },
     }
     rootView:insert(tableView)
@@ -64,8 +67,8 @@ function scene:create( event )
     display.setDefault("background", 1, 1, 1)
     createButtons(sceneGroup)
     createTable(sceneGroup)
-    -- createNearestStopLabels(sceneGroup)
-    NearestStop:setup(display.contentWidth / 2, 10, 250, 70)
+    
+    NearestStop:setup(display.contentWidth / 2, display.screenOriginY + nsHeight / 2, display.actualContentWidth, nsHeight)
     sceneGroup:insert(NearestStop.group)
     locationLabel = display.newText("", display.contentWidth / 2, display.contentHeight / 2, nil, 14)
     sceneGroup:insert(locationLabel)
